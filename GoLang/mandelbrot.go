@@ -11,11 +11,11 @@ import (
 
 // Parameters for rendering
 const (
-	width       = 1920     // Image width
-	height      = 1080    // Image height
+	width       = 30000     // Image width
+	height      = 30000    // Image height
 	xMin, xMax  = -2.5, 1 // Real axis range
 	yMin, yMax  = -1.25, 1.25 // Imaginary axis range
-	maxIter     = 10000    // Maximum number of iterations
+	maxIter     = 1000    // Maximum number of iterations
 	escapeRadius = 2.0    // Escape radius
 )
 
@@ -38,8 +38,8 @@ func main() {
 			// Set pixel color in the image
 			img.Set(px, py, color)
 
-			if (px * height + py) % (width * height / 100) == 0 {
-				fmt.Printf("\rProgress: %d%%", (px * height + py) / (width * height / 100))
+			if (px * width + py) % (width * height / 100) == 0 {
+				fmt.Printf("\rProgress: %d%%", (px * width + py) / (width * height / 100))
 			}
 		}
 	}
