@@ -6,19 +6,21 @@ import (
 	"image/png"
 	"math/cmplx"
 	"os"
+	"fmt"
 )
 
 // Parameters for rendering
 const (
-	width       = 10000     // Image width
-	height      = 10000    // Image height
+	width       = 1920     // Image width
+	height      = 1080    // Image height
 	xMin, xMax  = -2.5, 1 // Real axis range
 	yMin, yMax  = -1.25, 1.25 // Imaginary axis range
-	maxIter     = 1000    // Maximum number of iterations
+	maxIter     = 10000    // Maximum number of iterations
 	escapeRadius = 2.0    // Escape radius
 )
 
 func main() {
+	println("Mandelbrot Set Rendering...")
 	// Create a new blank image
 	img := image.NewRGBA(image.Rect(0, 0, width, height))
 
@@ -35,6 +37,10 @@ func main() {
 
 			// Set pixel color in the image
 			img.Set(px, py, color)
+
+			if (px * height + py) % (width * height / 100) == 0 {
+				fmt.Printf("\rProgress: %d%%", (px * height + py) / (width * height / 100))
+			}
 		}
 	}
 
@@ -50,7 +56,7 @@ func main() {
 		panic(err)
 	}
 
-	println("Mandelbrot image saved as mandelbrot.png")
+	println("\nMandelbrot image saved as mandelbrot.png")
 }
 
 // mandelbrot computes the escape time and returns a color based on iterations
@@ -60,7 +66,7 @@ func mandelbrot(c complex128) color.Color {
 		distance := cmplx.Abs(z)
 		if distance > escapeRadius {
 			c := uint8(255 * (distance / escapeRadius))
-			return color.RGBA{255, 0, 0, c}
+			return color.RGBA{c, c/2, (255 - c)/4, 255}
 		}
 		z = z*z + c
 	}
