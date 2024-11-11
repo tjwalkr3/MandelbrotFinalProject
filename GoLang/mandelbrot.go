@@ -1,3 +1,4 @@
+// To run the simulation, type "go run mandelbrot.go"
 package main
 
 import (
@@ -11,8 +12,8 @@ import (
 
 // Parameters for rendering
 const (
-	width       = 30000     // Image width
-	height      = 30000    // Image height
+	width       = 4096     // Image width
+	height      = 2160    // Image height
 	xMin, xMax  = -2.5, 1 // Real axis range
 	yMin, yMax  = -1.25, 1.25 // Imaginary axis range
 	maxIter     = 1000    // Maximum number of iterations
@@ -37,26 +38,30 @@ func main() {
 
 			// Set pixel color in the image
 			img.Set(px, py, color)
+		}
 
-			if (px * width + py) % (width * height / 100) == 0 {
-				fmt.Printf("\rProgress: %d%%", (px * width + py) / (width * height / 100))
-			}
+		if (px % (width / 100) == 0) && (px / (width / 100) <= 100) {
+			fmt.Printf("\rProgress: %d%%", px / (width / 100))
 		}
 	}
 
-	// Save the image to file
+	println("\nEncoding and compressing image...")
+
 	f, err := os.Create("mandelbrot.png")
 	if err != nil {
 		panic(err)
 	}
 	defer f.Close()
 
-	// Encode the image as PNG
-	if err := png.Encode(f, img); err != nil {
+	encoder := png.Encoder{
+		CompressionLevel: png.BestCompression,
+	}
+
+	if err := encoder.Encode(f, img); err != nil {
 		panic(err)
 	}
 
-	println("\nMandelbrot image saved as mandelbrot.png")
+	println("Mandelbrot image saved as mandelbrot.png")
 }
 
 // mandelbrot computes the escape time and returns a color based on iterations
