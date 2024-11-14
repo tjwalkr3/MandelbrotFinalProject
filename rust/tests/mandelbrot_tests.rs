@@ -1,9 +1,7 @@
 // mandelbrot_tests.rs
-use image::{Rgb};
+use image:: Rgb;
 use num_complex::Complex;
-use mandelbrot_renderer::{get_image, pixel_to_complex, escape_time};
-
-
+use mandelbrot_renderer::mandelbrot::{pixel_to_complex, escape_time, get_color};
 
 #[test]
 fn test_pixel_to_complex() {

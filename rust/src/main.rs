@@ -1,13 +1,9 @@
-use image::{ImageBuffer, Rgb};
-use num_complex::Complex;
-
-mod mandelbrot;
-
-use mandelbrot::mandelbrot::{get_image, pixel_to_complex, escape_time, get_color};
+pub mod mandelbrot;
+use mandelbrot::get_image;
 
 fn main() {
-    let width = 16000;
-    let height = 9000;
+    let width = 1920;
+    let height = 1080;
     let max_iterations = 500;
 
     // Define the range of the complex plane

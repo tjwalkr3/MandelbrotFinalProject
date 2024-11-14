@@ -9,3 +9,7 @@ license = "CC0-1.0"
 [dependencies]
 image = "0.24"         # For generating and saving images
 num-complex = "0.4"    # For handling complex numbers
+
+[lib]
+name = "mandelbrot_renderer"
+path = "src/lib.rs"
