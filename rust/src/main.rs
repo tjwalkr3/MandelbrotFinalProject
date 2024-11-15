@@ -3,14 +3,13 @@ use mandelbrot_renderer::mandelbrot::get_image;
 use image::RgbImage;
 
 fn main() {
-    // Set up Clap to handle command-line arguments
     let matches = Command::new("Mandelbrot Renderer")
         .version("1.0")
         .author("Thomas Jones <thomas.jones1@students.snow.edu>")
         .about("Generates a Mandelbrot set image")
         .arg(
             Arg::new("width")
-                .short('w')
+                .short('x')
                 .long("width")
                 .value_name("WIDTH")
                 .default_value("1920")
