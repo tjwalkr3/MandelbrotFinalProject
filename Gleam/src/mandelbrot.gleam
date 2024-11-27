@@ -20,7 +20,7 @@ pub fn main() {
 }
 
 // Generate Mandelbrot set data
-fn generate_mandelbrot(width: Int, height: Int, max_iter: Int) -> List(List(Float)) {
+pub fn generate_mandelbrot(width: Int, height: Int, max_iter: Int) -> List(List(Float)) {
   let x_min = -2.5
   let x_max = 1.0
   let y_min = -1.125
@@ -42,7 +42,7 @@ fn generate_mandelbrot(width: Int, height: Int, max_iter: Int) -> List(List(Floa
 }
 
 // Calculate Mandelbrot iterations for a point using tail recursion
-fn escape_time(cx: Float, cy: Float, max_iter: Int) -> Int {
+pub fn escape_time(cx: Float, cy: Float, max_iter: Int) -> Int {
   escape_time_tail(cx, cy, max_iter, 0, 0.0, 0.0)
 }
 
@@ -60,7 +60,7 @@ fn escape_time_tail(cx: Float, cy: Float, max_iter: Int, count: Int, zx: Float, 
 }
 
 // Map iterations to grayscale value (0-255)
-fn color_map(iterations: Int, max_iter: Int) -> Float {
+pub fn color_map(iterations: Int, max_iter: Int) -> Float {
   case iterations == max_iter {
     True -> 0.0
     False -> int_to_float(iterations) /. int_to_float(max_iter)
@@ -84,7 +84,7 @@ fn round_float_to_int(f: Float) -> Int {
 }
 
 // Math to make the rendering have vivid colors and smooth gradients
-fn get_colors(intensity) -> BitArray {
+pub fn get_colors(intensity) -> BitArray {
   let r = round_float_to_int(9.0 *. {1.0 -. intensity} *. result.unwrap(float.power(intensity, 3.0), 1.0) *. 255.0)
   let g = round_float_to_int(15.0 *. result.unwrap(float.power({1.0 -. intensity}, 2.0), 1.0) *. result.unwrap(float.power(intensity, 2.0), 1.0) *. 255.0)
   let b = round_float_to_int(8.5 *. result.unwrap(float.power({1.0 -. intensity}, 3.0), 1.0) *. intensity *. 255.0)
