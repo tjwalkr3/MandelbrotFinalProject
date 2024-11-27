@@ -3,13 +3,14 @@ import gleam/float
 import gleam/io
 import gleam/list
 import gleam/bit_array
+import gleam/result
 import simplifile
 import pngleam
 
 pub fn main() {
-  let width = 800
-  let height = 800
-  let max_iter = 1000
+  let width = 3840
+  let height = 2160
+  let max_iter = 50
   let filename = "mandelbrot.png"
 
   // Generate Mandelbrot set and write it to a PNG file
@@ -19,11 +20,11 @@ pub fn main() {
 }
 
 // Generate Mandelbrot set data
-fn generate_mandelbrot(width: Int, height: Int, max_iter: Int) -> List(List(Int)) {
+fn generate_mandelbrot(width: Int, height: Int, max_iter: Int) -> List(List(Float)) {
   let x_min = -2.5
   let x_max = 1.0
-  let y_min = -1.0
-  let y_max = 1.0
+  let y_min = -1.125
+  let y_max = 1.125
 
   let scale_x = {x_max -. x_min} /. int_to_float(width)
   let scale_y = {y_max -. y_min} /. int_to_float(height)
@@ -34,35 +35,35 @@ fn generate_mandelbrot(width: Int, height: Int, max_iter: Int) -> List(List(Int)
     |> list.map(fn(x) {
       let cx = x_min +. int_to_float(x) *. scale_x
       let cy = y_min +. int_to_float(y) *. scale_y
-      let iterations = mandelbrot_iterations(cx, cy, max_iter)
+      let iterations = escape_time(cx, cy, max_iter)
       color_map(iterations, max_iter)
     })
   })
 }
 
 // Calculate Mandelbrot iterations for a point using tail recursion
-fn mandelbrot_iterations(cx: Float, cy: Float, max_iter: Int) -> Int {
-  mandelbrot_iterations_tail(cx, cy, max_iter, 0, 0.0, 0.0)
+fn escape_time(cx: Float, cy: Float, max_iter: Int) -> Int {
+  escape_time_tail(cx, cy, max_iter, 0, 0.0, 0.0)
 }
 
 // Tail-recursive helper function
-fn mandelbrot_iterations_tail(cx: Float, cy: Float, max_iter: Int, count: Int, zx: Float, zy: Float) -> Int {
+fn escape_time_tail(cx: Float, cy: Float, max_iter: Int, count: Int, zx: Float, zy: Float) -> Int {
   case count >= max_iter || zx *. zx +. zy *. zy >. 4.0 {
     True -> count
     False -> {
       let temp = zx *. zx -. zy *. zy +. cx
       let new_zy = 2.0 *. zx *. zy +. cy
       let new_zx = temp
-      mandelbrot_iterations_tail(cx, cy, max_iter, count + 1, new_zx, new_zy)
+      escape_time_tail(cx, cy, max_iter, count + 1, new_zx, new_zy)
     }
   }
 }
 
 // Map iterations to grayscale value (0-255)
-fn color_map(iterations: Int, max_iter: Int) -> Int {
+fn color_map(iterations: Int, max_iter: Int) -> Float {
   case iterations == max_iter {
-    True -> 0
-    False -> round_float_to_int(255.0 *. int_to_float(iterations) /. int_to_float(max_iter))
+    True -> 0.0
+    False -> int_to_float(iterations) /. int_to_float(max_iter)
   }
 }
 
@@ -82,15 +83,24 @@ fn round_float_to_int(f: Float) -> Int {
   }
 }
 
+// Math to make the rendering have vivid colors and smooth gradients
+fn get_colors(intensity) -> BitArray {
+  let r = round_float_to_int(9.0 *. {1.0 -. intensity} *. result.unwrap(float.power(intensity, 3.0), 1.0) *. 255.0)
+  let g = round_float_to_int(15.0 *. result.unwrap(float.power({1.0 -. intensity}, 2.0), 1.0) *. result.unwrap(float.power(intensity, 2.0), 1.0) *. 255.0)
+  let b = round_float_to_int(8.5 *. result.unwrap(float.power({1.0 -. intensity}, 3.0), 1.0) *. intensity *. 255.0)
+
+  <<r:8, g:8, b:8>>
+}
+
 // Write PNG file
-fn write_png_file(filename: String, width: Int, height: Int, image_data: List(List(Int))) {
+fn write_png_file(filename: String, width: Int, height: Int, image_data: List(List(Float))) {
   // Convert each row into a packed BitArray
   let packed_data = image_data
     |> list.map(fn(row) {
       row
-      |> list.fold(<<>>, fn(acc, pixel) {
+      |> list.fold(<<>>, fn(acc, intensity) {
         // Add RGB values for the grayscale pixel to the current row's BitArray
-        bit_array.append(acc, <<pixel:8, pixel:8, pixel:8>>)
+        bit_array.append(acc, get_colors(intensity))
       })
     })
 
