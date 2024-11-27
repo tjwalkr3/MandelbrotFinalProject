@@ -25,19 +25,17 @@ pub fn escape_time_test() {
   |> should.equal(33)
 }
 
-pub fn color_map_test() {
-  // Test max iterations
-  mandelbrot.color_map(50, 50)
+pub fn intensity_test() {
+  mandelbrot.intensity(50, 50)
   |> should.equal(0.0)
 
-  // Test gradient mapping
-  mandelbrot.color_map(25, 50)
+  mandelbrot.intensity(25, 50)
   |> should.equal(0.5)
 
-  mandelbrot.color_map(50, 100)
+  mandelbrot.intensity(50, 100)
   |> should.equal(0.5)
 
-  mandelbrot.color_map(25, 100)
+  mandelbrot.intensity(25, 100)
   |> should.equal(0.25)
 }
 

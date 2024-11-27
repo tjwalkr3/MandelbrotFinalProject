@@ -36,7 +36,7 @@ pub fn generate_mandelbrot(width: Int, height: Int, max_iter: Int) -> List(List(
       let cx = x_min +. int_to_float(x) *. scale_x
       let cy = y_min +. int_to_float(y) *. scale_y
       let iterations = escape_time(cx, cy, max_iter)
-      color_map(iterations, max_iter)
+      intensity(iterations, max_iter)
     })
   })
 }
@@ -60,7 +60,7 @@ fn escape_time_tail(cx: Float, cy: Float, max_iter: Int, count: Int, zx: Float, 
 }
 
 // Map iterations to grayscale value (0-255)
-pub fn color_map(iterations: Int, max_iter: Int) -> Float {
+pub fn intensity(iterations: Int, max_iter: Int) -> Float {
   case iterations == max_iter {
     True -> 0.0
     False -> int_to_float(iterations) /. int_to_float(max_iter)
