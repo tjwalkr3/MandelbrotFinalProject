@@ -1,6 +1,6 @@
 # Mandelbrot Set Rendering Tool
 ## Languages
-I will be implementing the Mandelbrot set rendering tool in Python with KlongPy, GoLang, and C#.
+I will be implementing the Mandelbrot set rendering tool in Rust, Gleam, and C#.
 
 ## Method:
 I will do this using the escape-time algorithm.  This algorithm is as follows:
