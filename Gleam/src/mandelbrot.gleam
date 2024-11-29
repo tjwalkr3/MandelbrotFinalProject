@@ -104,9 +104,6 @@ fn write_png_file(filename: String, width: Int, height: Int, image_data: List(Li
       })
     })
 
-  // Debugging: Print the number of rows
-  io.println("Number of rows: " <> int.to_string(list.length(packed_data)))
-
   // Write the packed data to a PNG file using pngleam
   let _ = pngleam.from_packed(
     width: width,
