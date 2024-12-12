@@ -19,7 +19,7 @@ Now you can run the program:
 gleam run -- [args]
 ```
 The arguments are formatted like the following:
-(get this menu by running gleam run -- -h)
+(get this menu by running `gleam run -- -h`)
 ```bash
 mandelbrot
 
