@@ -6,11 +6,17 @@ pub fn get_image(
     width: u32,
     height: u32,
     max_iterations: u32,
-    min_real: f64,
-    max_real: f64,
-    min_imag: f64,
-    max_imag: f64,
+    zoom: f64
 ) -> ImageBuffer<Rgb<u8>, Vec<u8>> {
+    let center_real = -0.75;
+    let center_imag = 0.0;
+    let real_range = 3.5 / zoom;
+    let imag_range = 2.25 / zoom;
+    let min_real = center_real - real_range / 2.0;
+    let max_real = center_real + real_range / 2.0;
+    let min_imag = center_imag - imag_range / 2.0;
+    let max_imag = center_imag + imag_range / 2.0;
+
     let mut img = ImageBuffer::new(width, height);
 
     for y in 0..height {

@@ -1,7 +1,4 @@
 ﻿namespace Mandelbrot;
-
-using System.Diagnostics;
-using System.Runtime.InteropServices;
 using CommandLine;
 using static Mandelbrot.MandelbrotLib;
 
@@ -9,31 +6,29 @@ class MandelbrotApp
 {
 	public class Options
 	{
-		[Option('w', "width", Required = false, Default = 1920, HelpText = "Width of the output image.")]
+		[Option('x', "width", Required = false, Default = 9600, HelpText = "Width of the output image.")]
 		public int Width { get; set; }
 
-		[Option('h', "height", Required = false, Default = 1080, HelpText = "Height of the output image.")]
+		[Option('y', "height", Required = false, Default = 5400, HelpText = "Height of the output image.")]
 		public int Height { get; set; }
 
-		[Option('i', "iterations", Required = false, Default = 1000, HelpText = "Maximum iterations for the escape-time algorithm.")]
+		[Option('i', "iterations", Required = false, Default = 35, HelpText = "Maximum iterations for the escape-time algorithm.")]
 		public int MaxIterations { get; set; }
-	}
 
-	static void Main(string[] args)
+        [Option('z', "zoom", Required = false, Default = 1.0, HelpText = "Zoom factor (larger is more zoomed in).")]
+        public double Zoom { get; set; }
+    }
+
+    static void Main(string[] args)
 	{
 		Parser.Default.ParseArguments<Options>(args)
 			.WithParsed(options =>
 			{
-				// Parse CLI options
-				int width = options.Width;
-				int height = options.Height;
-				int maxIterations = options.MaxIterations;
 				string filePath = Path.Combine(Environment.CurrentDirectory, "mandelbrot.png");
 
 				// Generate the Mandelbrot set
 				Console.WriteLine("Generating Mandelbrot set...");
-				GenerateMandelbrotSet(width, height, maxIterations, filePath);
-
+				GenerateMandelbrotSet(options.Width, options.Height, options.MaxIterations, options.Zoom, filePath);
 				Console.WriteLine($"Mandelbrot set saved to {filePath}");
 			})
 			.WithNotParsed(errors =>

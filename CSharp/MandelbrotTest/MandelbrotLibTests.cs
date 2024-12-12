@@ -12,8 +12,8 @@ public class MandelbrotLibTests
 	[InlineData(50, 0, 100, -2.5, 1.0, -0.75)]
 	public void TestMap(int value, int minSrc, int maxSrc, double minDst, double maxDst, double expected)
 	{
-		double result = MandelbrotLib.Map(value, minSrc, maxSrc, minDst, maxDst);
-		Assert.Equal(expected, result, precision: 5); // Allow small floating-point differences
+		double result = MandelbrotLib.MapToImaginary(value, minSrc, maxSrc, minDst, maxDst);
+		Assert.Equal(expected, result, precision: 5);
 	}
 
 	[Theory]

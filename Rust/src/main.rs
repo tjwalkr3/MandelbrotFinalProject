@@ -39,7 +39,7 @@ fn main() {
                 .short('i')
                 .long("iterations")
                 .value_name("MAX_ITERATIONS")
-                .default_value("500")
+                .default_value("35")
                 .help("The maximum number of iterations to calculate for each pixel")
                 .value_parser(clap::value_parser!(u32))
         )
@@ -51,30 +51,8 @@ fn main() {
     let zoom: f64 = matches.get_one::<f64>("zoom").copied().unwrap();
     let max_iterations: u32 = matches.get_one::<u32>("max_iterations").copied().unwrap();
 
-    // Define the center of the set and adjust for zoom
-    let center_real = -0.75;
-    let center_imag = 0.0;
-
-    // Adjust the range for real and imaginary axes based on zoom
-    let real_range = 3.5 / zoom;  // The total real range (width)
-    let imag_range = 2.25 / zoom;  // The total imaginary range (height)
-
-    // Adjust the coordinates based on the zoom factor
-    let min_real = center_real - real_range / 2.0;
-    let max_real = center_real + real_range / 2.0;
-    let min_imag = center_imag - imag_range / 2.0;
-    let max_imag = center_imag + imag_range / 2.0;
-
     // Generate the image
-    let img: RgbImage = get_image(
-        width,
-        height,
-        max_iterations,
-        min_real,
-        max_real,
-        min_imag,
-        max_imag,
-    );
+    let img: RgbImage = get_image(width, height, max_iterations, zoom);
 
     // Save the generated image
     img.save("mandelbrot.png").expect("Failed to save image");

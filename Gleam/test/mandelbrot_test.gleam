@@ -39,8 +39,8 @@ pub fn intensity_test() {
   |> should.equal(0.25)
 }
 
+// Test intensity mapping to RGB
 pub fn get_colors_test() {
-  // Test intensity mapping to RGB
   let low_intensity = mandelbrot.get_colors(0.0) // Black
   let mid_intensity = mandelbrot.get_colors(0.5) // Mid gradient
   let high_intensity = mandelbrot.get_colors(1.0) // Brightest
@@ -55,13 +55,13 @@ pub fn get_colors_test() {
   |> should.not_equal(high_intensity)
 }
 
+// Generate a very small Mandelbrot set
 pub fn generate_mandelbrot_test() {
-  // Generate a very small Mandelbrot set
   let width = 10
   let height = 10
   let max_iter = 10
-
-  let data = mandelbrot.generate_mandelbrot(width, height, max_iter)
+  let zoom = 1.0
+  let data = mandelbrot.generate_mandelbrot(width, height, max_iter, zoom)
 
   // Ensure dimensions are correct
   list.length(data)
